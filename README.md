@@ -1,7 +1,8 @@
 # Tesis_2018_Pruebas
 Programa en Java utilizado para realizar pruebas y mediciones.
 
-# Para compilar los códigos fuentes y la libreria externa en formato .jar usar el siguiente comando:
+# Para compilar los códigos fuentes y la libreria externa en formato .jar 
+- Windows cmd:
 
  $ javac -cp *;. Pruebas.java
 
@@ -11,7 +12,8 @@ Programa en Java utilizado para realizar pruebas y mediciones.
 
 /* - - - - - - - - - - - - */
 
-Forma simplificada del comando "java -cp jar1:jar2:jar3:dir1:. HelloWorld", en la instrucción que se muestra
-mostró anteriormente importan automáticamente todos los .jar que estén en el directorio)
+Forma simplificada del comando "java -cp jar1:jar2:jar3:dir1:. HelloWorld", en la instrucción que se
+mostró anteriormente importan automáticamente todos los .jar que estén en el directorio.
 
-Para Linux cambiar ; por :
+- Terminal de Linux:
+Cambiar ; por :
