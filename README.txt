@@ -1,10 +1,10 @@
 ﻿Para compilar los códigos fuentes y la libreria externa en formato .jar usar el siguiente comando:
 
- $ javac -cp *;. Pruebas.java
+ $ javac -cp *;. Tesis.java
 
  Luego de compilar el programa, ejecutar con:
 
- $ java -cp *;. Pruebas
+ $ java -cp *;. Tesis
 
 /* - - - - - - - - - - - - */
 

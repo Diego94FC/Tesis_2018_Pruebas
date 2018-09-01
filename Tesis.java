@@ -21,14 +21,8 @@ import org.deidentifier.arx.criteria.RecursiveCLDiversity;
 import org.deidentifier.arx.risk.RiskEstimateBuilder;
 import org.deidentifier.arx.risk.RiskModelSampleSummary;
 
-
-public class Pruebas  {
-    
-   
-    public static void main(String[] args) throws IOException {
-        
-        
-        
+public class Tesis {
+    public static void main(String[] args) throws IOException {    
         // Cargar bdd de entrada
         Data data = Data.create("data/adult.csv", StandardCharsets.UTF_8, ';');
         // Definir atributos, jerarquias y archivos de entrada de las mismas.
@@ -46,17 +40,17 @@ public class Pruebas  {
         
         config.setSuppressionLimit(0.99d);
         
-        System.out.println("Elija el numero de la opcion de la tecnica a utilizar :");
-        System.out.println("Opciones dispibles: 1, 2 y 3 :");
+        System.out.println("Elija el número de la opción de la técnica a utilizar :");
+        System.out.println("Opciones disponibles: 1, 2 y 3 :");
         System.out.println("1: K-anonimato");
         System.out.println("2: (c,L)-diversidad recursiva");
-        System.out.println("3: T-cercania");
+        System.out.println("3: T-cercanía");
         Scanner scanner = new Scanner(System.in);
         String opcion = scanner.nextLine();
         
         switch (opcion)
         {
-            case "1": System.out.println("Se selecciono K-anonimato");
+            case "1": System.out.println("Se seleccionó K-anonimato");
                       //System.out.println("Ingrese el valor de K"); 
                       
                       String k ="0";
@@ -70,7 +64,7 @@ public class Pruebas  {
                       config.addPrivacyModel(new KAnonymity(Integer.parseInt(k)));                      
                       break;
                       
-            case "2": System.out.println("Se selecciono (c,L)-diversidad recursiva");
+            case "2": System.out.println("Se seleccionó (c,L)-diversidad recursiva");
                       String kl ="0";
                       while(Integer.parseInt(kl) < 2 || Integer.parseInt(kl) > 25)
                       {
@@ -88,7 +82,7 @@ public class Pruebas  {
                       String l ="0";
                       while(Integer.parseInt(l) < 2 || Integer.parseInt(l) > 15)
                       {
-                      System.out.println("Ingrese el valor de L  (L debe ser mayor a 1 y menor a 16)"); 
+                      System.out.println("Ingrese el valor de L  (l debe ser mayor a 1 y menor a 16)"); 
                       l = scanner.nextLine();
                       }
                       
@@ -97,7 +91,7 @@ public class Pruebas  {
                       config.addPrivacyModel(new RecursiveCLDiversity("occupation", Integer.parseInt(c), Integer.parseInt(l)));
                       break;
                       
-            case "3": System.out.println("Se selecciono T-cercania");
+            case "3": System.out.println("Se seleccionó T-cercanía");
                       
                       String kt ="0";
                       while(Integer.parseInt(kt) < 2 || Integer.parseInt(kt) > 25)
@@ -109,7 +103,7 @@ public class Pruebas  {
                       String t ="-1";
                       while(Float.valueOf(t) <= 0 || Float.valueOf(t) > 1)
                       {
-                      System.out.println("Ingrese el valor de T (entro 0 y 1)");
+                      System.out.println("Ingrese el valor de T (entre 0 y 1)");
                       t = scanner.nextLine();
                       }
                       
@@ -120,7 +114,7 @@ public class Pruebas  {
                       config.addPrivacyModel(new HierarchicalDistanceTCloseness("occupation", Float.valueOf(t),jerar ));         
                       break;
                       
-            default: System.out.println("Opcion invalida. Ejecucion finalizada");
+            default: System.out.println("Opción invalida. Ejecución finalizada");
                      System.exit(0);
                      break;
         }
@@ -132,8 +126,8 @@ public class Pruebas  {
         String visualizar ="";
         while(!visualizar.equals("si") && !visualizar.equals("no"))
         {
-        System.out.println("¿Desea visualizar la tabla anonimizada? (si/no)"); 
-        visualizar = scanner.nextLine();
+            System.out.println("¿Desea exportar la tabla anonimizada? (si/no)"); 
+            visualizar = scanner.nextLine();
         }
         
         //Datos de entrada, no serán mostrados
@@ -143,28 +137,36 @@ public class Pruebas  {
         ARXResult result = anonymizer.anonymize(data, config);
         DataHandle outHandle = result.getOutput(false);
         
-        //Calcula y muestra el riesgo en pantalla
-        System.out.println("\n***********************************");
-        System.out.println("     Comenzando anonimizacion");
-        System.out.println("***********************************\n");
-        
-        //Indices de las columnas con las cuales ordenar el resultado (para obtener un orden similar a clases de equivalencia)
-        int[] index = {0,1,2,3,4,5,6,7};               
-        outHandle.sort(true,index);
-        //Muestra estadísticas útiles de los datos.
-        printResult(result, data);
-        
         //Muestra columnas con la anonimización resultante
         
         if(visualizar.equals("si"))
         {
-        System.out.println(" Tabla Resultante: ");
-        Iterator<String[]> transformed = result.getOutput(false).iterator();
-        while (transformed.hasNext()) {
-            System.out.print("   ");
-            System.out.println(Arrays.toString(transformed.next()));
+            /*System.out.println("- Tabla Resultante: ");
+            Iterator<String[]> transformed = result.getOutput(false).iterator();
+            while (transformed.hasNext()) {
+                System.out.print("   ");
+                System.out.println(Arrays.toString(transformed.next()));
+            }*/
+            
+            //export csv file
+            
+            System.out.println("La tabla anonimizada será exportada en: 'data/output_database.csv'"+" al terminar la ejecución."); 
         }
-        }
+        
+        //Calcula y muestra el riesgo en pantalla
+        System.out.println("\n***********************************");
+        System.out.println("     Comenzando anonimización");
+        System.out.println("***********************************");
+        
+        //Indices de las columnas con las cuales ordenar el resultado (para obtener un orden similar a clases de equivalencia)
+        int[] index = {0,1,2,3,4,5,6,7};               
+        outHandle.sort(true,index);
+        
+        
+        
+        
+        //Muestra estadísticas útiles de los datos.
+        printResult(result, data);
         
         //Cantidad de tuplas suprimidas
         int supressedRows = result.getOutput(result.getGlobalOptimum(), false).getStatistics().getEquivalenceClassStatistics().getNumberOfOutlyingTuples();
@@ -173,44 +175,48 @@ public class Pruebas  {
         System.out.println("\n***********************************");
         System.out.println("     Estadísticas para comparar");
         System.out.println("***********************************");
-        System.out.println("Promedio de edad datos reales: "+getAvgInputAge(inHandle, result));
-        System.out.println("Promedio de edad con promedio del intervalo: "+getAvgAnonAgeAvg(outHandle, supressedRows));    
-        System.out.println("Promedio de edad con limite inferior del intervalo: "+getAvgAnonAgeInf(outHandle, supressedRows));    
-        System.out.println("Max de edad entrada: "+getMaxAgeInput(inHandle));
-        System.out.println("Max de edad anonimizado: "+getMaxAgeAnon(outHandle));
-        System.out.println("Min de edad entrada: "+getMinAgeInput(inHandle));
-        System.out.println("min de edad anonimizado: "+getMinAgeAnon(outHandle));
-        int[] mode = new int[2];
-        mode = getModeAgeInput(inHandle);
-        System.out.println("cantidad moda entrada: "+mode[0]);
-        System.out.println("valor moda entrada: "+mode[1]);
-        String[] modeAnon = new String[2];     
-        modeAnon = getModeAgeAnon(outHandle);
-        System.out.println("cantidad moda anon: "+modeAnon[0]);
-        System.out.println("valor moda anon: "+modeAnon[1]); 
+        System.out.println("- Promedio de edad entrada: "+getAvgInputAge(inHandle, result));
+        System.out.println("- Promedio de edad (con promedio del intervalo): "+getAvgAnonAgeAvg(outHandle, supressedRows));    
+        System.out.println("- Promedio de edad (con limite inferior del intervalo): "+getAvgAnonAgeInf(outHandle, supressedRows));    
+        System.out.println("- Máximo de edad entrada: "+getMaxAgeInput(inHandle));
+        System.out.println("- Máximo de edad anonimizado: "+getMaxAgeAnon(outHandle));
+        System.out.println("- Mínimo de edad entrada: "+getMinAgeInput(inHandle));
+        System.out.println("- Mínimo de edad anonimizado: "+getMinAgeAnon(outHandle));
+        //int[] mode = new int[2];
+        //mode = getModeAgeInput(inHandle);
+        //String[] modeAnon = new String[2];     
+        //modeAnon = getModeAgeAnon(outHandle);
+        //System.out.println("- Cantidad moda entrada: "+mode[0]);
+        //System.out.println("- Cantidad moda anonimizado: "+modeAnon[0]);
+        //System.out.println("- Valor moda entrada: "+mode[1]);
+        //System.out.println("- Valor moda anonimizado: "+modeAnon[1]); 
         System.out.println();
         getRisk(outHandle);
         System.out.println();
         
+        result.getOutput(false).save("data/output_database.csv", ';');  
     }
     
     
     
      private static String getPrecent(double value)
     {
-        return (int)(Math.round(value * 100)) + "%";
+        return value * 100 + " %";
     }
     
     private static void getRisk(DataHandle handle)
     {
         RiskEstimateBuilder builder = handle.getRiskEstimator();
         RiskModelSampleSummary risk = builder.getSampleBasedRiskSummary(0.1d);
-        System.out.println("Riesgo promedio: "+getPrecent(risk.getProsecutorRisk().getSuccessRate()));     
-        System.out.println("Riesgo promedio: "+risk.getProsecutorRisk().getSuccessRate());   
-        System.out.println("Riesgo maximo: "+getPrecent(risk.getProsecutorRisk().getHighestRisk()));     
-        System.out.println("Riesgo maximo: "+risk.getProsecutorRisk().getHighestRisk());     
-        System.out.println("Tuplas en riesgo: "+getPrecent(risk.getProsecutorRisk().getRecordsAtRisk()));
-        System.out.println("Tuplas en riesgo: "+risk.getProsecutorRisk().getRecordsAtRisk());
+        System.out.println("************************************");
+        System.out.println("    Riesgo de re identificación");
+        System.out.println("************************************");
+        System.out.println("- Riesgo promedio: "+getPrecent(risk.getProsecutorRisk().getSuccessRate()));     
+        //System.out.println("- Riesgo promedio: "+risk.getProsecutorRisk().getSuccessRate());   
+        System.out.println("- Riesgo máximo: "+getPrecent(risk.getProsecutorRisk().getHighestRisk()));     
+        //System.out.println("- Riesgo maximo: "+risk.getProsecutorRisk().getHighestRisk());     
+        System.out.println("- Tuplas en riesgo: "+getPrecent(risk.getProsecutorRisk().getRecordsAtRisk()));
+        //System.out.println("- Tuplas en riesgo: "+risk.getProsecutorRisk().getRecordsAtRisk());
     }
     
     private static int getAvgInputAge(DataHandle handle, ARXResult result)
@@ -377,21 +383,21 @@ public class Pruebas  {
         
         return output;
     }
-    
+  
     
     protected static void printResult(final ARXResult result, final Data data) {
 
         // Print time
         final DecimalFormat df1 = new DecimalFormat("#####0.00");
-        final String sTotal = df1.format(result.getTime() / 1000d) + "s";
-        System.out.println("Tiempo necesario para anonimizar: " + sTotal);
+        final String sTotal = df1.format(result.getTime() / 1000d) + " s";
+        System.out.println("- Tiempo necesario para anonimizar: " + sTotal);
 
         // Extract
         final ARXLattice.ARXNode optimum = result.getGlobalOptimum();
         final List<String> qis = new ArrayList<String>(data.getDefinition().getQuasiIdentifyingAttributes());
 
         if (optimum == null) {
-            System.out.println(" - No se encontro solucion");
+            System.out.println(" - No se encontró solución");
             return;
         }
 
@@ -421,15 +427,40 @@ public class Pruebas  {
             }
         }
 
-        // Print
-                System.out.println("Perdida de informacion: " + result.getGlobalOptimum().getLowestScore() + " / " + result.getGlobalOptimum().getHighestScore());
-        System.out.println("Generalizacion optima");
+        // Print+""
+        String perdida_info_low = result.getGlobalOptimum().getLowestScore()+"";
+        double perdida_info_low_porcentaje = Double.parseDouble(perdida_info_low)*100;
+        String perdida_info_high = result.getGlobalOptimum().getHighestScore()+"";
+        double perdida_info_high_porcentaje = Double.parseDouble(perdida_info_high)*100;
+        System.out.println("- Perdida de información: " + perdida_info_low_porcentaje + " % / " + perdida_info_high_porcentaje + " %");
+        //System.out.println("- Perdida de informacion: " + result.getGlobalOptimum().getLowestScore() + " / " + result.getGlobalOptimum().getHighestScore());
+        System.out.println("\n- Generalización optima:");
         for (int i = 0; i < qis.size(); i++) {
             System.out.println("   * " + identifiers[i] + ": " + generalizations[i]);
         }
         System.out.println("\n**************************************************");
-        System.out.println("    Estadisticas de las clases de equivalencia");
+        System.out.println("    Estadísticas de las clases de equivalencia");
         System.out.println("**************************************************");
-        System.out.println(result.getOutput(result.getGlobalOptimum(), false).getStatistics().getEquivalenceClassStatistics());
-    }
+        double tam_prom_ce = result.getOutput(result.getGlobalOptimum(),false).getStatistics().getEquivalenceClassStatistics().getAverageEquivalenceClassSize();
+        double tam_prom_ce_consup = result.getOutput(result.getGlobalOptimum(),false).getStatistics().getEquivalenceClassStatistics().getAverageEquivalenceClassSizeIncludingOutliers();
+        int tam_maximo_ce = result.getOutput(result.getGlobalOptimum(),false).getStatistics().getEquivalenceClassStatistics().getMaximalEquivalenceClassSize();
+        int tam_maximo_ce_consup = result.getOutput(result.getGlobalOptimum(),false).getStatistics().getEquivalenceClassStatistics().getMaximalEquivalenceClassSizeIncludingOutliers();
+        int tam_minimo_ce = result.getOutput(result.getGlobalOptimum(),false).getStatistics().getEquivalenceClassStatistics().getMinimalEquivalenceClassSize();
+        int tam_minimo_ce_consup = result.getOutput(result.getGlobalOptimum(),false).getStatistics().getEquivalenceClassStatistics().getMinimalEquivalenceClassSizeIncludingOutliers();
+        int numero_ce = result.getOutput(result.getGlobalOptimum(),false).getStatistics().getEquivalenceClassStatistics().getNumberOfEquivalenceClasses();
+        int numero_ce_consup = result.getOutput(result.getGlobalOptimum(),false).getStatistics().getEquivalenceClassStatistics().getNumberOfEquivalenceClassesIncludingOutliers();
+        int num_tuplas = result.getOutput(result.getGlobalOptimum(),false).getStatistics().getEquivalenceClassStatistics().getNumberOfTuples();
+        int num_tuplas_sup = result.getOutput(result.getGlobalOptimum(),false).getStatistics().getEquivalenceClassStatistics().getNumberOfOutlyingTuples();
+        System.out.println("- Tamaño promedio de clase de equivalencia: "+tam_prom_ce);
+        System.out.println("- Tamaño promedio de clase de equivalencia (incluyendo datos suprimidos): "+tam_prom_ce_consup);
+        System.out.println("- Tamaño máximo de clase de equivalencia: "+tam_maximo_ce);
+        System.out.println("- Tamaño máximo de clase de equivalencia (incluyendo datos suprimidos): "+tam_maximo_ce_consup);
+        System.out.println("- Tamaño mínimo de clase de equivalencia: "+tam_minimo_ce);
+        System.out.println("- Tamaño mínimo de clase de equivalencia (incluyendo datos suprimidos): "+tam_minimo_ce_consup);
+        System.out.println("- Número de clases de equivalencia: "+numero_ce);
+        System.out.println("- Número de clases de equivalencia (incluyendo datos suprimidos): "+numero_ce_consup);
+        System.out.println("- Número de tuplas: "+num_tuplas);
+        System.out.println("- Número de tuplas suprimidas: "+num_tuplas_sup);
+        //System.out.println(result.getOutput(result.getGlobalOptimum(), false).getStatistics().getEquivalenceClassStatistics());
+    }    
 }
